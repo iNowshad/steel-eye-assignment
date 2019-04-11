@@ -1,0 +1,22 @@
+---
+- name: configure apache server
+  hosts: webserver
+  remote_user: root
+  become: true
+
+  tasks:
+    - name: install httpd package
+      yum:
+        name: httpd
+        state: latest
+
+    - name: copy load balance conf to servers
+      copy:
+        src: /home/ansadmin/lb.conf
+        dest: /etc/httpd/conf.d
+
+    - name: start and enable http server
+      service:
+        name: httpd
+        state: started
+        enabled: yes
